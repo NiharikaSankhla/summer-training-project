@@ -94,8 +94,7 @@ model=LogisticRegression()
 model.fit(x_train, y_train)
 
 import pickle
-pickle.dump(model, open('model.pkl','wb'))
-
+pickle.dump(model, open('model.pkl', 'wb'))
 
 x_train_prediction=model.predict(x_train)
 # print(x_train_prediction)
