@@ -1,21 +1,43 @@
+from flask import Flask, render_template, request
 import pickle
-model=pickle.load(open('model.pkl','rb'))
+import pandas as pd
 
-print("Titanic Survival Prediction: ")
+app = Flask(__name__)
 
-# # #take input 
-Pclass= int(input("Enter Passenger class(1/2/3): "))
-Sex=int(input("Enter Sex(0=male,1=female): "))
-Age=float(input("Enter Age: "))
-SibSp=int(input("Enter no.of Sibling or spouse: "))
-Parch=int(input("Enter no. of parents-children: "))
+model = pickle.load(open('model.pkl', 'rb'))
 
-#prediction
-input_data=[[Pclass,Sex,Age,SibSp,Parch]]
-prediction=model.predict(input_data)
+@app.route('/', methods=['GET', 'POST'])
+def home():
 
-if prediction[0]==1:
-    print("Passenger Survived")
-else:
-    print("Passenger Did Not Survived")
+    prediction_text = ""
 
+    if request.method == 'POST':
+
+        Pclass = int(request.form['Pclass'])
+        Sex = int(request.form['Sex'])
+        Age = float(request.form['Age'])
+        SibSp = int(request.form['SibSp'])
+        Parch = int(request.form['Parch'])
+
+        input_df = pd.DataFrame(
+            [[Pclass, Sex, Age, SibSp, Parch]],
+            columns=['Pclass', 'Sex', 'Age', 'SibSp', 'Parch']
+        )
+
+        prediction = model.predict(input_df)
+        probability = model.predict_proba(input_df)
+
+        survival_probability = probability[0][1] * 100
+        if prediction[0] == 1:
+            prediction_text = "Passenger Survived"
+        else:
+            prediction_text = "Passenger Did Not Survive"
+
+    return render_template(
+        'index.html',
+        prediction_text=prediction_text,
+        survival_probability=f"{survival_probability:.2f}" if request.method == 'POST' else "",
+        model_name="Logistic Regression"
+    )
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -59,7 +59,7 @@ titanic_data['Embarked']=titanic_data['Embarked'].fillna(titanic_data['Embarked'
 #sns.countplot(x='Sex', data=titanic_data)
 
 #number of survivors based on gender
-#sns.countplot(x='Sex',hue='Survived', data=titanic_data) #the males are more but gender survived more is female
+# sns.countplot(x='Sex',hue='Survived', data=titanic_data) #the males are more but gender survived more is female
 
 #making countplot for pclass (people survived based on pclass)
 # sns.countplot(x='Pclass',hue='Survived', data=titanic_data)
@@ -86,25 +86,25 @@ y=titanic_data['Survived']
 #print(x)    #featues 
 # print(y)    #targets
 
-#splitting the data into training data and test data
+# #splitting the data into training data and test data
 x_train, x_test, y_train, y_test =train_test_split(x,y, test_size=0.2, random_state=2)
 # print(x.shape, x_train.shape,x_test.shape)  #total data, training, testing
 
 model=LogisticRegression()
 model.fit(x_train, y_train)
 
-import pickle
-pickle.dump(model, open('model.pkl', 'wb'))
+# import pickle
+# pickle.dump(model, open('model.pkl', 'wb'))
 
-x_train_prediction=model.predict(x_train)
-# print(x_train_prediction)
-training_accuracy=accuracy_score(y_train,x_train_prediction)
-print('Training Accuracy:',training_accuracy)
-# print(titanic_data.head())
+# x_train_prediction=model.predict(x_train)
+# # print(x_train_prediction)
+# training_accuracy=accuracy_score(y_train,x_train_prediction)
+# print('Training Accuracy:',training_accuracy)
+# # print(titanic_data.head())
 
-x_test_prediction=model.predict(x_test)
-testing_accuracy=accuracy_score(y_test, x_test_prediction)
-print("Testing Accuracy:", testing_accuracy)
+# x_test_prediction=model.predict(x_test)
+# testing_accuracy=accuracy_score(y_test, x_test_prediction)
+# print("Testing Accuracy:", testing_accuracy)
 
 # # #take input 
 Pclass= int(input("Enter Passenger class(1/2/3):"))
@@ -114,13 +114,20 @@ SibSp=int(input("Enter no.of Sibling or spouse:"))
 Parch=int(input("Enter no. of parents-children:"))
 
 #prediction
-input_data=[[Pclass,Sex,Age,SibSp,Parch]]
-prediction=model.predict(input_data)
+input_df = pd.DataFrame(
+    [[Pclass, Sex, Age, SibSp, Parch]],
+    columns=['Pclass', 'Sex', 'Age', 'SibSp', 'Parch']
+)
 
-if prediction[0]==1:
+prediction = model.predict(input_df)
+probability = model.predict_proba(input_df)
+
+print(f"\nSurvival Probability: {probability[0][1]*100:.2f}%")
+
+if prediction[0] == 1:
     print("Passenger Survived")
 else:
-    print("Passenger Did Not Survived")
+    print("Passenger Did Not Survive")
 
 
 # plt.show()
