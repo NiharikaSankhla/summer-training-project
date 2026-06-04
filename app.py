@@ -2,12 +2,15 @@ from flask import Flask, render_template, request
 import pickle
 import pandas as pd
 
+print("TEST CHANGE 999")
+
 app = Flask(__name__)
 
 model = pickle.load(open('model.pkl', 'rb'))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+
 
     prediction_text = ""
 
