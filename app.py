@@ -11,8 +11,8 @@ model = pickle.load(open('model.pkl', 'rb'))
 @app.route('/', methods=['GET', 'POST'])
 def home():
 
-
     prediction_text = ""
+    survival_probability = ""
 
     if request.method == 'POST':
 
@@ -30,7 +30,8 @@ def home():
         prediction = model.predict(input_df)
         probability = model.predict_proba(input_df)
 
-        survival_probability = probability[0][1] * 100
+        survival_probability = f"{probability[0][1] * 100:.2f}"
+
         if prediction[0] == 1:
             prediction_text = "Passenger Survived"
         else:
@@ -39,8 +40,9 @@ def home():
     return render_template(
         'index.html',
         prediction_text=prediction_text,
-        survival_probability=f"{survival_probability:.2f}" if request.method == 'POST' else "",
+        survival_probability=survival_probability,
         model_name="Logistic Regression"
     )
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
