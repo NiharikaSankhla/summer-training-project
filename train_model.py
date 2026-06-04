@@ -106,28 +106,5 @@ model.fit(x_train, y_train)
 # testing_accuracy=accuracy_score(y_test, x_test_prediction)
 # print("Testing Accuracy:", testing_accuracy)
 
-# # #take input 
-Pclass= int(input("Enter Passenger class(1/2/3):"))
-Sex=int(input("Enter Sex(0=male,1=female):"))
-Age=float(input("Enter Age:"))
-SibSp=int(input("Enter no.of Sibling or spouse:"))
-Parch=int(input("Enter no. of parents-children:"))
-
-#prediction
-input_df = pd.DataFrame(
-    [[Pclass, Sex, Age, SibSp, Parch]],
-    columns=['Pclass', 'Sex', 'Age', 'SibSp', 'Parch']
-)
-
-prediction = model.predict(input_df)
-probability = model.predict_proba(input_df)
-
-print(f"\nSurvival Probability: {probability[0][1]*100:.2f}%")
-
-if prediction[0] == 1:
-    print("Passenger Survived")
-else:
-    print("Passenger Did Not Survive")
-
 
 # plt.show()
