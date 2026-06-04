@@ -4,10 +4,11 @@ pipeline {
     stages {
 
         stage('Build Docker Image') {
-            steps {
-                bat 'docker build --no-cache -t titanic-ml:v1.0 .'
-            }
-        }
+    steps {
+        bat 'dir'
+        bat 'docker build --no-cache -t titanic-ml:v1.0 .'
+    }
+}
 
         stage('Run Container') {
             steps {
