@@ -3,15 +3,9 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/NiharikaSankhla/summer-training-project'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t titanic-ml:v1.0 .'
+                bat 'docker build --no-cache -t titanic-ml:v1.0 .'
             }
         }
 
